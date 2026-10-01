@@ -1,10 +1,16 @@
-import dotenv from "dotenv";
+import "dotenv/config";
 import app from "./app";
 
-dotenv.config();
+const PORT = Number(process.env.PORT) || 5000;
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Portfolio CMS API running on port ${PORT}`);
 });
+
+server.on("error", (error) => {
+  console.error("Server error:", error);
+});
+
+setInterval(() => {
+  // Keep server process alive
+}, 1000);
