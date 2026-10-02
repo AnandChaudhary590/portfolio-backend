@@ -11,6 +11,10 @@ import blogRoutes from "./routes/blog.routes";
 import experienceRoutes from "./routes/experience.routes";
 import testimonialRoutes from "./routes/testimonial.routes";
 import serviceRoutes from "./routes/service.routes";
+import uploadRoutes from "./routes/upload.routes";
+import mediaRoutes from "./routes/media.routes";
+
+import path from "path";
 
 const app = express();
 
@@ -20,6 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/about", aboutRoutes);
 app.use("/api/skills", skillRoutes);
@@ -28,7 +33,8 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/experience", experienceRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/services", serviceRoutes);
-
+app.use("/api/upload", uploadRoutes);
+app.use("/api/media", mediaRoutes);
 
 app.get("/api/health", (_req, res) => {
   res.status(200).json({
