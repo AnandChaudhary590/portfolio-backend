@@ -9,7 +9,7 @@ import { authenticate } from "../middleware/auth.middleware";
 
 const router = Router();
 
-router.get("/", getProjectsController);
+router.get("/", authenticate, getProjectsController);
 
 router.post("/", authenticate, createProjectController);
 
