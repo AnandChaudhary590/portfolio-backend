@@ -13,12 +13,19 @@ import testimonialRoutes from "./routes/testimonial.routes";
 import serviceRoutes from "./routes/service.routes";
 import uploadRoutes from "./routes/upload.routes";
 import mediaRoutes from "./routes/media.routes";
+import messageRoutes from "./routes/message.routes";
 
 import path from "path";
 
 const app = express();
 
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: {
+      policy: "cross-origin",
+    },
+  })
+);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -35,6 +42,7 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/media", mediaRoutes);
+app.use("/api/contact", messageRoutes);
 
 app.get("/api/health", (_req, res) => {
   res.status(200).json({
