@@ -8,8 +8,8 @@ import {
 const aboutSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  profileImage: z.string().optional(),
-  resumeUrl: z.string().optional(),
+  profileImage: z.string().nullable().optional(),
+resumeUrl: z.string().nullable().optional(),
 });
 
 export const getAboutController = async (

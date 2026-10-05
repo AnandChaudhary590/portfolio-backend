@@ -21,8 +21,8 @@ export const getAbout = async () => {
 interface UpdateAboutInput {
   title: string;
   description: string;
-  profileImage?: string;
-  resumeUrl?: string;
+  profileImage?: string | null;
+  resumeUrl?: string | null;
 }
 
 export const updateAbout = async (data: UpdateAboutInput) => {
