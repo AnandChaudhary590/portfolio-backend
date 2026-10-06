@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import cloudinary from "../config/cloudinary";
 import { createMedia } from "../services/media.service";
 
 export const uploadImageController = async (
@@ -13,14 +14,42 @@ export const uploadImageController = async (
       });
     }
 
-    const fileUrl = `${req.protocol}://${req.get("host")}/uploads/images/${req.file.filename}`;
+    const uploadResult = await new Promise<{
+      secure_url: string;
+      public_id: string;
+    }>((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "portfolio",
+          resource_type: "image",
+        },
+        (error, result) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+
+          if (!result) {
+            reject(new Error("Cloudinary upload failed"));
+            return;
+          }
+
+          resolve({
+            secure_url: result.secure_url,
+            public_id: result.public_id,
+          });
+        }
+      );
+
+      stream.end(req.file!.buffer);
+    });
 
     const media = await createMedia({
-      filename: req.file.filename,
+      filename: uploadResult.public_id,
       originalName: req.file.originalname,
       mimeType: req.file.mimetype,
       size: req.file.size,
-      url: fileUrl,
+      url: uploadResult.secure_url,
     });
 
     return res.status(201).json({
